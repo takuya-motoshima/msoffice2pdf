@@ -1,4 +1,4 @@
-[![msoffice2pdf](hero.svg)](https://takuya-motoshima.github.io/msoffice2pdf/)
+![msoffice2pdf](hero.svg)
 
 Convert Microsoft Office documents (ppt, pptx, doc, docx, xls, xlsx) to PDF.   
 Click [here](CHANGELOG.md) to see the change log.
