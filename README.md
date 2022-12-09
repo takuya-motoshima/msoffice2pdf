@@ -7,6 +7,9 @@ Click [here](CHANGELOG.md) to see the change log.
   <img src="docs/img/convert.svg" width="406">
 </p>
 
+## Web Demo
+Click [here](docs/web-demo/README.md) to learn how to use the web demo.
+
 ## Supported OS
 - Linux
 - MAC

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="dark">
+<!--begin::Head-->
+<head>
+  <title>Demonstration of msoffice2pdf</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!--begin::Fonts-->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+  <!--end::Fonts-->
+  <!--begin::Global Stylesheets Bundle(used by all pages)-->
+  <link href="theme/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+  <link href="theme/css/style.bundle.css" rel="stylesheet" type="text/css" />
+  <!--end::Global Stylesheets Bundle-->
+
+  <style>
+    .dropzone.dropzone-queue .dropzone-item .dropzone-toolbar [class*="dropzone-"] i {
+      transition: color 0.2s ease;
+      font-size: 0.8rem;
+      color: var(--kt-gray-800);
+    }
+
+    .dropzone.dropzone-queue .dropzone-item .dropzone-toolbar .dropzone-download,
+    .dropzone.dropzone-queue .dropzone-item .dropzone-toolbar .dropzone-preview {
+      height: 25px;
+      width: 25px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+  </style>
+</head>
+<!--end::Head-->
+<!--begin::Body-->
+<body>
+  <!--begin::Content container-->
+  <div class="container py-15 px-10">
+  <!-- <div class="container-xxl py-15 px-10"> -->
+    <!--begin::Heading-->
+    <h1 class="mb-5">Office documents (ppt, pptx, doc, docx, xls, xlsx) to PDF.</h1>
+    <!--end::Heading-->
+    <!--begin::Form-->
+    <form class="form" action="#" method="post">
+      <!--begin::Dropzone-->
+      <div data-ref="dropzone" class="dropzone dropzone-queue mb-2">
+        <!--begin::Controls-->
+        <div class="dropzone-panel mb-lg-0 mb-2">
+          <a data-on-attach-files data-ref="select" class="dropzone-select btn btn-sm btn-primary me-2">Attach files</a>
+          <a data-ref="uploadAll" class="dropzone-upload btn btn-sm btn-light-primary me-2">Upload All</a>
+          <a data-ref="removeAll" class="dropzone-remove-all btn btn-sm btn-light-primary">Remove All</a>
+        </div>
+        <!--end::Controls-->
+        <!--begin::Items-->
+        <div data-ref="dropzoneItems"></div>
+        <!--end::Items-->
+      </div>
+      <!--end::Dropzone-->
+    </form>
+    <!--end::Form-->
+  </div>
+  <!--end::Content container-->
+  <!--begin::Javascript-->
+  <!--begin::Global Javascript Bundle(used by all pages)-->
+  <script src="theme/plugins/global/plugins.bundle.js"></script>
+  <script src="theme/js/scripts.bundle.js"></script>
+  <!--end::Global Javascript Bundle-->
+	<!--begin::Custom Javascript(used for this page only)-->
+  <script src="libs/metronic-extension/dist/build.js"></script>
+  <script>
+    const {selectRef, initTooltip} = metronicExtension;
+    const ref = selectRef();
+
+    // Make the whole body a dropzone.
+    const dropzone = new Dropzone(ref.dropzone.get(0), {
+      url: '/convert', // Set the url for your upload script location
+      paramName: 'files',
+      parallelUploads: 20,
+      acceptedFiles: [
+        'application/vnd.ms-excel',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.ms-powerpoint',
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+      ].join(','),
+      previewTemplate: 
+        `<div class="dropzone-item">
+          <!--begin::File-->
+          <div class="dropzone-file">
+            <div class="dropzone-filename text-gray-800" style="cursor: default;">
+            <!-- <div class="dropzone-filename"> -->
+              <span data-dz-name></span>
+              <strong>(<span data-dz-size>0kb</span>)</strong>
+            </div>
+            <div class="dropzone-error" data-dz-errormessage></div>
+          </div>
+          <!--end::File-->
+          <!--begin::Progress-->
+          <div class="dropzone-progress">
+            <div class="progress">
+              <div class="progress-bar bg-primary" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-dz-uploadprogress></div>
+            </div>
+          </div>
+          <!--end::Progress-->
+          <!--begin::Toolbar-->
+          <div class="dropzone-toolbar">
+            <span
+              class="dropzone-start"
+              data-bs-toggle="tooltip"
+              title="Click me to upload file.">
+              <i class="bi bi-play-fill fs-3"></i></span>
+            <a
+              class="dropzone-download d-none"
+              data-bs-toggle="tooltip"
+              title="Click me to download file."
+              download>
+              <i class="bi bi-download fs-3"></i></a>
+            <a
+              class="dropzone-preview d-none"
+              data-bs-toggle="tooltip"
+              title="Click me to preview file."
+              target="_blank">
+              <i class="bi bi-search fs-5"></i></a>
+            <span
+              class="dropzone-cancel"
+              data-dz-remove
+              data-bs-toggle="tooltip"
+              title="Click me to remove file."
+              style="display: none;">
+              <i class="bi bi-x fs-3"></i></span>
+            <span
+              class="dropzone-delete"
+              data-dz-remove
+              data-bs-toggle="tooltip"
+              title="Click me to remove file.">
+              <i class="bi bi-x fs-1"></i></span>
+          </div>
+          <!--end::Toolbar-->
+        </div>`,
+      maxFilesize: 10, // Max filesize in MB
+      autoQueue: false, // Make sure the files aren't queued until manually added
+      previewsContainer: ref.dropzoneItems.get(0), // Define the container to display the previews
+      clickable: ref.select.get(0) // Define the element that should be used as click trigger to select files.
+    });
+
+    dropzone.on('addedfile', file => {
+      const dropzoneItem = $(file.previewElement)
+
+      // Hookup the start button.
+      dropzoneItem.on('click', '.dropzone-start', () => dropzone.enqueueFile(file));
+
+      // Hide the Upload and Delete buttons for all files.
+      ref.uploadAll.css('display', 'inline-block');
+      ref.removeAll.css('display', 'inline-block');
+
+      // Display tooltips on the buttons of the added items.
+      initTooltip(dropzoneItem);
+    });
+
+    // Update the progress bar.
+    dropzone.on('uploadprogress', (file, progress) => {
+      $(file.previewElement).css('width', `${progress}%`);
+    });
+    // dropzone.on('totaluploadprogress', progress => {
+    //   ref.dropzone.find('.progress-bar').css('width', `${progress}%`);
+    // });
+
+    dropzone.on('sending', file => {
+      const dropzoneItem = $(file.previewElement);
+      // Show the total progress bar when upload starts.
+      dropzoneItem.find('.progress-bar').css('opacity', 1);
+
+      // And disable the start button
+      dropzoneItem.find('.dropzone-start').prop('disabled', true);
+    });
+
+    // Hide the progress bar when nothing's uploading anymore.
+    dropzone.on('complete', progress => {
+      const dropzoneItem = ref.dropzone.find('.dz-complete');
+      setTimeout(() => {
+        dropzoneItem.find('.progress-bar').css('opacity', 0);
+        dropzoneItem.find('.progress').css('opacity', 0);
+        dropzoneItem.find('.dropzone-start').addClass('d-none');
+        dropzoneItem.find('.dropzone-download').removeClass('d-none');
+        dropzoneItem.find('.dropzone-preview').removeClass('d-none');
+      }, 300);
+    });
+
+    // On all files completed upload
+    dropzone.on('queuecomplete', progress => {
+      ref.uploadAll.css('display', 'none');
+    });
+
+    // On all files removed
+    dropzone.on('removedfile', file => {
+      if (dropzone.files.length < 1) {
+        ref.uploadAll.css('display', 'none');
+        ref.removeAll.css('display', 'none');
+      }
+    });
+
+    // Response after upload success.
+    dropzone.on('success', (file, res) => {
+      // Create a download link for the converted PDF file.
+      const dropzoneItem = $(file.previewElement);
+      dropzoneItem.find('.dropzone-download').attr('href', res.filePath);
+      dropzoneItem.find('.dropzone-preview').attr('href', res.filePath);
+    });
+
+    // Setup the buttons for all transfers
+    ref.uploadAll.on('click', () => {
+      dropzone.enqueueFiles(dropzone.getFilesWithStatus(Dropzone.ADDED));
+    });
+
+    // Setup the button for remove all files
+    ref.removeAll.on('click', () => {
+      ref.uploadAll.css('display', 'none');
+      ref.removeAll.css('display', 'none');
+      dropzone.removeAllFiles(true);
+    });
+  </script>
+  <!--end::Custom Javascript-->
+  <!--end::Javascript-->
+</body>
+<!--end::Body-->
+</html>

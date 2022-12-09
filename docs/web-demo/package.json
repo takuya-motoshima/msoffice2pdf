@@ -1,0 +1,23 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "nodemon --ignore client/ --ignore public/ --ignore views/ bin/www 8080",
+    "//start": "pm2 start ecosystem.config.js",
+    "//restart": "pm2 restart ecosystem.config.js",
+    "//stop": "pm2 stop ecosystem.config.js",
+    "//log": "pm2 log msoffice2pdf"
+  },
+  "dependencies": {
+    "debug": "~2.6.9",
+    "express-sweet": "~1",
+    "express-validator": "^6.14.2",
+    "http-errors": "~1.6.3",
+    "msoffice2pdf": "^1.0.1",
+    "nodejs-shared": "^1.0.10",
+    "tmp": "^0.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
