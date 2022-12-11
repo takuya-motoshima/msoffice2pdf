@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.0.4] - 2022/12/12
+### Changed
+- Added example of LibreOffice installation procedure to the Requirements section of README.md.
+
 ## [1.0.3] - 2022/12/12
 ### Changed
 - Added language options to the web demo.  
@@ -22,3 +26,4 @@ All notable changes to this project will be documented in this file.
 [1.0.1]: https://github.com/takuya-motoshima/msoffice2pdf/compare/v1.0.0...v1.0.1
 [1.0.2]: https://github.com/takuya-motoshima/msoffice2pdf/compare/v1.0.1...v1.0.2
 [1.0.3]: https://github.com/takuya-motoshima/msoffice2pdf/compare/v1.0.2...v1.0.3
+[1.0.4]: https://github.com/takuya-motoshima/msoffice2pdf/compare/v1.0.3...v1.0.4
