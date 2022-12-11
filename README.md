@@ -17,7 +17,35 @@ Click [here](docs/web-demo/README.md) to learn how to use the web demo.
 
 ## Requirements
 LibreOffice version 5.3 or higher is required.  
-See [https://www.libreoffice.org/get-help/install-howto/](https://www.libreoffice.org/get-help/install-howto/) for installation instructions.
+See [https://www.libreoffice.org/get-help/install-howto/](https://www.libreoffice.org/get-help/install-howto/) for installation instructions.  
+
+For example, on Amazon Linux, follow these steps to install LibreOffice
+
+1. Install LibreOffice.
+    ```sh
+    sudo amazon-linux-extras enable libreoffice
+    sudo yum -y install libreoffice-langpack-ja
+    sudo yum -y install libreoffice
+    ```
+1. Check fonts.
+    ```sh
+    yum list | grep ipa- | grep fonts
+    # ipa-gothic-fonts.noarch                003.03-5.amzn2                @amzn2-core
+    # ipa-mincho-fonts.noarch                003.03-5.amzn2                amzn2-core
+    # ipa-pgothic-fonts.noarch               003.03-5.amzn2                amzn2-core
+    # ipa-pmincho-fonts.noarch               003.03-5.amzn2                amzn2-core
+    ```
+1. Install fonts.  
+    Install the fonts found earlier.
+    ```sh
+    sudo yum -y install \
+        ipa-gothic-fonts \
+        ipa-mincho-fonts \
+        ipa-pgothic-fonts \
+        ipa-pmincho-fonts
+    ```
+
+    If you want to add more fonts, place font files such as ttf and ttc in the home directory of the user running msoffice2pdf (~/.local/share/fonts/).
 
 ## Installation
 ```sh
