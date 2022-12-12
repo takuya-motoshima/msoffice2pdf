@@ -19,33 +19,65 @@ Click [here](docs/web-demo/README.md) to learn how to use the web demo.
 LibreOffice version 5.3 or higher is required.  
 See [https://www.libreoffice.org/get-help/install-howto/](https://www.libreoffice.org/get-help/install-howto/) for installation instructions.  
 
-For example, on Amazon Linux, follow these steps to install LibreOffice
+- For example, on Amazon Linux, follow these steps to install LibreOffice
+    1. Install LibreOffice.
+        ```sh
+        sudo amazon-linux-extras enable libreoffice
+        sudo yum -y install libreoffice libreoffice-langpack-ja
+        ```
+    1. Check fonts.
+        ```sh
+        yum list | grep ipa- | grep fonts
+        # ipa-gothic-fonts.noarch                003.03-5.amzn2                @amzn2-core
+        # ipa-mincho-fonts.noarch                003.03-5.amzn2                amzn2-core
+        # ipa-pgothic-fonts.noarch               003.03-5.amzn2                amzn2-core
+        # ipa-pmincho-fonts.noarch               003.03-5.amzn2                amzn2-core
+        ```
+    1. Install fonts.  
+        Install the fonts found earlier.
+        ```sh
+        sudo yum -y install \
+            ipa-gothic-fonts \
+            ipa-mincho-fonts \
+            ipa-pgothic-fonts \
+            ipa-pmincho-fonts
+        ```
 
-1. Install LibreOffice.
-    ```sh
-    sudo amazon-linux-extras enable libreoffice
-    sudo yum -y install libreoffice-langpack-ja
-    sudo yum -y install libreoffice
-    ```
-1. Check fonts.
-    ```sh
-    yum list | grep ipa- | grep fonts
-    # ipa-gothic-fonts.noarch                003.03-5.amzn2                @amzn2-core
-    # ipa-mincho-fonts.noarch                003.03-5.amzn2                amzn2-core
-    # ipa-pgothic-fonts.noarch               003.03-5.amzn2                amzn2-core
-    # ipa-pmincho-fonts.noarch               003.03-5.amzn2                amzn2-core
-    ```
-1. Install fonts.  
-    Install the fonts found earlier.
-    ```sh
-    sudo yum -y install \
-        ipa-gothic-fonts \
-        ipa-mincho-fonts \
-        ipa-pgothic-fonts \
-        ipa-pmincho-fonts
-    ```
+        If you want to add more fonts, place font files such as ttf and ttc in the home directory of the user running msoffice2pdf (~/.local/share/fonts/).
+- How to install the latest stable LibreOffice.  
+    <!-- NOTE: The RPMs to install in this step are also available [here](softwares/).  -->
+    1. Uninstall the installed LibreOffice.
+        ```sh
+        sudo yum -y remove libreoffice-langpack-ja libreoffice
+        ```
+    1. Install LibreOffice.
+        ```sh
+        cd ~
+        wget https://download.documentfoundation.org/libreoffice/stable/7.4.3/rpm/x86_64/LibreOffice_7.4.3_Linux_x86-64_rpm.tar.gz
+        tar -zxvf LibreOffice_7.4.3_Linux_x86-64_rpm.tar.gz
+        sudo yum -y install LibreOffice_7.4.3.2_Linux_x86-64_rpm//RPMS/*.rpm
+        ```
 
-    If you want to add more fonts, place font files such as ttf and ttc in the home directory of the user running msoffice2pdf (~/.local/share/fonts/).
+        If an error occurs here that libcairo.so.2 is missing, install cairo.
+        ```sh
+        sudo yum -y install cairo
+        ```
+        Check the version of LibreOffice installed.
+        ```sh
+        libreoffice7.4 --version
+        # LibreOffice 7.4.3.2 1048a8393ae2eeec98dff31b5c133c5f1d08b890
+        ```
+    1. Installed Japanese language pack.
+        ```sh
+        cd ~
+        wget http://download.documentfoundation.org/libreoffice/stable/7.4.3/rpm/x86_64/LibreOffice_7.4.3_Linux_x86-64_rpm_langpack_ja.tar.gz
+        tar -zxvf LibreOffice_7.4.3_Linux_x86-64_rpm_langpack_ja.tar.gz
+        sudo yum -y install LibreOffice_7.4.3.2_Linux_x86-64_rpm_langpack_ja/RPMS/*.rpm
+        ```
+    1. Test. Convert Word to PDF.
+        ```sh
+        libreoffice7.4 --headless --convert-to pdf:writer_pdf_Export --outdir convert test.docx
+        ```
 
 ## Installation
 ```sh
