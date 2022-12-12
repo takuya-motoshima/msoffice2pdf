@@ -8,12 +8,10 @@
   "files": [
     "dist/*.js",
     "docs",
-    "tests",
     "types",
     "CHANGELOG.md",
     "hero.svg",
     "LANGUAGE-LIST.md",
-    "jest.config.json",
     "LICENSE",
     "package.json",
     "README.md"
