@@ -302,10 +302,14 @@
 
     // Update the progress bar.
     dropzone.on('uploadprogress', (file, progress) => {
-      $(file.previewElement).css('width', `${progress}%`);
+      $(file.previewElement)
+        .find('.progress-bar')
+        .css('width', `${progress}%`);
     });
     // dropzone.on('totaluploadprogress', progress => {
-    //   ref.dropzone.find('.progress-bar').css('width', `${progress}%`);
+    //   ref.dropzone
+    //     .find('.progress-bar')
+    //     .css('width', `${progress}%`);
     // });
 
     dropzone.on('sending', file => {
@@ -318,19 +322,21 @@
     });
 
     // Hide the progress bar when nothing's uploading anymore.
-    dropzone.on('complete', progress => {
+    dropzone.on('complete', file => {
       const dropzoneItem = ref.dropzone.find('.dz-complete');
       setTimeout(() => {
         dropzoneItem.find('.progress-bar').css('opacity', 0);
         dropzoneItem.find('.progress').css('opacity', 0);
         dropzoneItem.find('.dropzone-start').addClass('d-none');
-        dropzoneItem.find('.dropzone-download').removeClass('d-none');
-        dropzoneItem.find('.dropzone-preview').removeClass('d-none');
+        if (file.status !== 'error') {
+          dropzoneItem.find('.dropzone-download').removeClass('d-none');
+          dropzoneItem.find('.dropzone-preview').removeClass('d-none');
+        }
       }, 300);
     });
 
     // On all files completed upload
-    dropzone.on('queuecomplete', progress => {
+    dropzone.on('queuecomplete', () => {
       ref.uploadAll.css('display', 'none');
     });
 

@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.0.5] - 2022/12/12
+### Fixed
+- Fixed a bug that caused the progress bar in the web demo to display incorrectly.
+- The download and preview buttons are no longer displayed in case of upload errors in the web demo.
+
 ## [1.0.4] - 2022/12/12
 ### Changed
 - Added example of LibreOffice installation procedure to the Requirements section of README.md.
@@ -27,3 +32,4 @@ All notable changes to this project will be documented in this file.
 [1.0.2]: https://github.com/takuya-motoshima/msoffice2pdf/compare/v1.0.1...v1.0.2
 [1.0.3]: https://github.com/takuya-motoshima/msoffice2pdf/compare/v1.0.2...v1.0.3
 [1.0.4]: https://github.com/takuya-motoshima/msoffice2pdf/compare/v1.0.3...v1.0.4
+[1.0.5]: https://github.com/takuya-motoshima/msoffice2pdf/compare/v1.0.4...v1.0.5
