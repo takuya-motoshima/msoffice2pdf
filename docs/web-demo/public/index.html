@@ -47,8 +47,8 @@
       <div data-ref="dropzone" class="dropzone dropzone-queue mb-2">
         <!--begin::Controls-->
         <div class="dropzone-panel mb-lg-0 mb-2 d-flex">
-          <a data-on-attach-files data-ref="select" class="dropzone-select btn btn-sm btn-primary me-2">Attach files</a>
-          <a data-ref="uploadAll" class="dropzone-upload btn btn-sm btn-light-primary me-2">Upload All</a>
+          <a data-ref="select" class="dropzone-select btn btn-sm btn-primary me-2">Select File</a>
+          <a data-ref="uploadAll" class="dropzone-upload btn btn-sm btn-light-primary me-2">Convert All</a>
           <a data-ref="removeAll" class="dropzone-remove-all btn btn-sm btn-light-primary">Remove All</a>
           <!--begin::Language-->
           <div class="d-flex align-items-center fw-bold ms-auto">
@@ -228,6 +228,14 @@
       ].join(','),
       previewTemplate: 
         `<div class="dropzone-item">
+          <!--begin::Svg Icon | path: icons/duotune/files/fil003.svg-->
+          <span class="svg-icon svg-icon-2x svg-icon-primary me-4">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22Z" fill="currentColor"></path>
+              <path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor"></path>
+            </svg>
+          </span>
+          <!--end::Svg Icon-->
           <!--begin::File-->
           <div class="dropzone-file">
             <div class="dropzone-filename text-gray-800" style="cursor: default;">
@@ -250,7 +258,7 @@
             <span
               class="dropzone-start"
               data-bs-toggle="tooltip"
-              title="Click me to upload file.">
+              title="Click me to convert file.">
               <i class="bi bi-play-fill fs-3"></i></span>
             <a
               class="dropzone-download d-none"
