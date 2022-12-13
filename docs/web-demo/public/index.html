@@ -30,6 +30,10 @@
       cursor: pointer;
       transition: color 0.2s ease;
     }
+
+    .badge {
+      --bs-badge-font-weight: 400;
+    }
   </style>
 </head>
 <!--end::Head-->
@@ -48,7 +52,7 @@
         <!--begin::Controls-->
         <div class="dropzone-panel mb-lg-0 mb-2 d-flex">
           <a data-ref="select" class="dropzone-select btn btn-sm btn-primary me-2">Select File</a>
-          <a data-ref="uploadAll" class="dropzone-upload btn btn-sm btn-light-primary me-2">Convert All</a>
+          <a data-ref="convertAll" class="dropzone-upload btn btn-sm btn-light-primary me-2">Convert All</a>
           <a data-ref="removeAll" class="dropzone-remove-all btn btn-sm btn-light-primary">Remove All</a>
           <!--begin::Language-->
           <div class="d-flex align-items-center fw-bold ms-auto">
@@ -215,7 +219,8 @@
 
     // Make the whole body a dropzone.
     const dropzone = new Dropzone(ref.dropzone.get(0), {
-      url: '/convert', // Set the url for your upload script location
+      // Set the url for your upload script location.
+      url: '/convert',
       paramName: 'files',
       parallelUploads: 20,
       acceptedFiles: [
@@ -253,6 +258,11 @@
             </div>
           </div>
           <!--end::Progress-->
+          <!--begin::Status-->
+          <div class="dropzone-status text-gray-800 fs-8 ms-4 d-none">
+            <span class="badge badge-secondary text-uppercase me-2">uploading</span>
+          </div>
+          <!--end::Status-->
           <!--begin::Toolbar-->
           <div class="dropzone-toolbar">
             <span
@@ -288,10 +298,14 @@
           </div>
           <!--end::Toolbar-->
         </div>`,
-      maxFilesize: 10, // Max filesize in MB
-      autoQueue: false, // Make sure the files aren't queued until manually added
-      previewsContainer: ref.dropzoneItems.get(0), // Define the container to display the previews
-      clickable: ref.select.get(0) // Define the element that should be used as click trigger to select files.
+      // Max filesize in MB.
+      maxFilesize: 100,
+      // Make sure the files aren't queued until manually added.
+      autoQueue: false,
+      // Define the container to display the previews.
+      previewsContainer: ref.dropzoneItems.get(0),
+      // Define the element that should be used as click trigger to select files.
+      clickable: ref.select.get(0)
     });
 
     dropzone.on('addedfile', file => {
@@ -301,7 +315,7 @@
       dropzoneItem.on('click', '.dropzone-start', () => dropzone.enqueueFile(file));
 
       // Hide the Upload and Delete buttons for all files.
-      ref.uploadAll.css('display', 'inline-block');
+      ref.convertAll.css('display', 'inline-block');
       ref.removeAll.css('display', 'inline-block');
 
       // Display tooltips on the buttons of the added items.
@@ -310,23 +324,33 @@
 
     // Update the progress bar.
     dropzone.on('uploadprogress', (file, progress) => {
-      $(file.previewElement)
+      const dropzoneItem = $(file.previewElement);
+      dropzoneItem
         .find('.progress-bar')
         .css('width', `${progress}%`);
+      
+      // Displays the status during processing.
+      if (progress === 100)
+        dropzoneItem.find('.dropzone-status').html('<span class="badge badge-secondary text-uppercase">processing</span>');
     });
     // dropzone.on('totaluploadprogress', progress => {
     //   ref.dropzone
     //     .find('.progress-bar')
     //     .css('width', `${progress}%`);
     // });
-
-    dropzone.on('sending', file => {
+    dropzone.on('sending', (file, xhr, formData) => {
       const dropzoneItem = $(file.previewElement);
       // Show the total progress bar when upload starts.
       dropzoneItem.find('.progress-bar').css('opacity', 1);
 
       // And disable the start button
       dropzoneItem.find('.dropzone-start').prop('disabled', true);
+
+      // Displays the status of the upload in progress.
+      dropzoneItem.find('.dropzone-status').removeClass('d-none');
+
+      // Add language options to the data to be sent.
+      formData.append('language', ref.language.val());
     });
 
     // Hide the progress bar when nothing's uploading anymore.
@@ -339,19 +363,23 @@
         if (file.status !== 'error') {
           dropzoneItem.find('.dropzone-download').removeClass('d-none');
           dropzoneItem.find('.dropzone-preview').removeClass('d-none');
-        }
+          dropzoneItem.find('.dropzone-status').html('<span class="badge badge-success text-uppercase">finished</span>');
+        } else
+          dropzoneItem.find('.dropzone-status')
+            .html('<span class="badge badge-danger text-uppercase">error</span>')
+            .removeClass('d-none');
       }, 300);
     });
 
     // On all files completed upload
     dropzone.on('queuecomplete', () => {
-      ref.uploadAll.css('display', 'none');
+      ref.convertAll.css('display', 'none');
     });
 
     // On all files removed
     dropzone.on('removedfile', file => {
       if (dropzone.files.length < 1) {
-        ref.uploadAll.css('display', 'none');
+        ref.convertAll.css('display', 'none');
         ref.removeAll.css('display', 'none');
       }
     });
@@ -364,11 +392,6 @@
       dropzoneItem.find('.dropzone-preview').attr('href', res.filePath);
     });
 
-    // Add language options to the data to be sent.
-    dropzone.on('sending', (file, xhr, formData) => {
-      formData.append('language', ref.language.val());
-    });
-
     // Delete the tooltip at the same time the file is deleted.
     dropzone.on('removedfile', file => {
       for (let tooltipTrigger of file.previewElement.querySelectorAll('.dropzone-start,.dropzone-download,.dropzone-preview,.dropzone-cancel,.dropzone-delete')) {
@@ -378,13 +401,13 @@
     });
 
     // Setup the buttons for all transfers
-    ref.uploadAll.on('click', () => {
+    ref.convertAll.on('click', () => {
       dropzone.enqueueFiles(dropzone.getFilesWithStatus(Dropzone.ADDED));
     });
 
     // Setup the button for remove all files
     ref.removeAll.on('click', () => {
-      ref.uploadAll.css('display', 'none');
+      ref.convertAll.css('display', 'none');
       ref.removeAll.css('display', 'none');
       dropzone.removeAllFiles(true);
     });
