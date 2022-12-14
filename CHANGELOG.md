@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.0.11] - 2022/12/14
+### Fixed
+- Fixed typos in README.md.
+
 ## [1.0.10] - 2022/12/14
 ### Changed
 - Move the web demo from &quot;docs/web-demo/&quot; to &quot;web-demo/&quot;.
@@ -66,3 +70,4 @@ All notable changes to this project will be documented in this file.
 [1.0.8]: https://github.com/takuya-motoshima/msoffice2pdf/compare/v1.0.7...v1.0.8
 [1.0.9]: https://github.com/takuya-motoshima/msoffice2pdf/compare/v1.0.8...v1.0.9
 [1.0.10]: https://github.com/takuya-motoshima/msoffice2pdf/compare/v1.0.9...v1.0.10
+[1.0.11]: https://github.com/takuya-motoshima/msoffice2pdf/compare/v1.0.10...v1.0.11

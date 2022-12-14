@@ -141,11 +141,11 @@ msoffice2pdf(inputPath, outputPath, {
 ```
 
 ### Parameters
-- inputPath: string
+- inputPath: string  
     Paths to office documents (ppt, pptx, doc, docx, xls, xlsx).
-- outputPath: string
+- outputPath: string  
     PDF Path.
-- options.libreOfficeBinaryPath?: string
+- options.libreOfficeBinaryPath?: string  
     The path to the libreOffice executable (soffice) that you installed.  
     The default is to use the file found by looking for the following file.  
     - For Linux:  
@@ -157,7 +157,7 @@ msoffice2pdf(inputPath, outputPath, {
     - For WIndows:  
         C:\Program Files\LibreOffice*\program\soffice.exe  
         C:\Program Files (x86)\LibreOffice*\program\soffice.exe
-- options.language?: string
+- options.language?: string  
     Document Language. Default is undefined.  
     Click [here](LANGUAGE-LIST.md) for available language options.
     
