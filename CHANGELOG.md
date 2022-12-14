@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.0.10] - 2022/12/14
+### Changed
+- Move the web demo from &quot;docs/web-demo/&quot; to &quot;web-demo/&quot;.
+- Fix to hide the upload progress when the conversion starts in the web demo.
+- The conversion API error response has been changed to a simple error message instead of HTML.
+
 ## [1.0.9] - 2022/12/13
 ### Changed
 - Added developer memo (DEVELOPERS_NOTES.md).
@@ -16,7 +22,7 @@ All notable changes to this project will be documented in this file.
 
 ## [1.0.6] - 2022/12/12
 ### Changed
-- Add web demo dependencies (docs/web-demo/node_modules/) to .npmignore.
+- Add web demo dependencies (web-demo/node_modules/) to .npmignore.
 
 ## [1.0.5] - 2022/12/12
 ### Fixed
@@ -35,12 +41,12 @@ All notable changes to this project will be documented in this file.
 ## [1.0.3] - 2022/12/12
 ### Changed
 - Added language options to the web demo.  
-    ![select-language-option.png](docs/web-demo/screencaps/select-language-option.png)
+    ![select-language-option.png](web-demo/screencaps/select-language-option.png)
 
 ## [1.0.2] - 2022/12/9
 ### Added
 - Web demo added.
-    Click [here](docs/web-demo/README.md) to learn how to use the web demo.
+    Click [here](web-demo/README.md) to learn how to use the web demo.
 
 ## [1.0.1] - 2022/11/10
 ### Fixed
@@ -59,3 +65,4 @@ All notable changes to this project will be documented in this file.
 [1.0.7]: https://github.com/takuya-motoshima/msoffice2pdf/compare/v1.0.6...v1.0.7
 [1.0.8]: https://github.com/takuya-motoshima/msoffice2pdf/compare/v1.0.7...v1.0.8
 [1.0.9]: https://github.com/takuya-motoshima/msoffice2pdf/compare/v1.0.8...v1.0.9
+[1.0.10]: https://github.com/takuya-motoshima/msoffice2pdf/compare/v1.0.9...v1.0.10

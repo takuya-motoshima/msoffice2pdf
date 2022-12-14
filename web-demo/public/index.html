@@ -12,7 +12,7 @@
   <link href="theme/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
   <link href="theme/css/style.bundle.css" rel="stylesheet" type="text/css" />
   <!--end::Global Stylesheets Bundle-->
-
+  <!--begin::Custom Stylesheets-->
   <style>
     .dropzone.dropzone-queue .dropzone-item .dropzone-toolbar [class*="dropzone-"] i {
       transition: color 0.2s ease;
@@ -35,6 +35,7 @@
       --bs-badge-font-weight: 400;
     }
   </style>
+  <!--end::Custom Stylesheets-->
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -219,7 +220,6 @@
 
     // Make the whole body a dropzone.
     const dropzone = new Dropzone(ref.dropzone.get(0), {
-      // Set the url for your upload script location.
       url: '/convert',
       paramName: 'files',
       parallelUploads: 20,
@@ -260,41 +260,47 @@
           <!--end::Progress-->
           <!--begin::Status-->
           <div class="dropzone-status text-gray-800 fs-8 ms-4 d-none">
-            <span class="badge badge-secondary text-uppercase me-2">uploading</span>
+            <span class="badge badge-secondary">Uploading</span>
           </div>
           <!--end::Status-->
+          <!--begin::Spinner-->
+          <span class="dropzone-spinner spinner-border spinner-border-sm text-primary ms-4 d-none" role="status"></span>
+          <!--end::Spinner-->
           <!--begin::Toolbar-->
           <div class="dropzone-toolbar">
-            <span
-              class="dropzone-start"
+            <button
+              type="button"
+              class="btn btn-icon dropzone-start"
               data-bs-toggle="tooltip"
               title="Click me to convert file.">
-              <i class="bi bi-play-fill fs-3"></i></span>
+              <i class="bi bi-play-fill fs-3"></i></button>
             <a
-              class="dropzone-download d-none"
+              class="btn btn-icon dropzone-download d-none"
               data-bs-toggle="tooltip"
               title="Click me to download file."
               download>
               <i class="bi bi-download fs-3"></i></a>
             <a
-              class="dropzone-preview d-none"
+              class="btn btn-icon dropzone-preview d-none"
               data-bs-toggle="tooltip"
               title="Click me to preview file."
               target="_blank">
               <i class="bi bi-search fs-5"></i></a>
-            <span
-              class="dropzone-cancel"
+            <button
+              type="button"
+              class="btn btn-icon dropzone-cancel"
               data-dz-remove
               data-bs-toggle="tooltip"
               title="Click me to remove file."
               style="display: none;">
-              <i class="bi bi-x fs-3"></i></span>
-            <span
-              class="dropzone-delete"
+              <i class="bi bi-x fs-3"></i></button>
+            <button
+              type="button"
+              class="btn btn-icon dropzone-delete"
               data-dz-remove
               data-bs-toggle="tooltip"
               title="Click me to remove file.">
-              <i class="bi bi-x fs-1"></i></span>
+              <i class="bi bi-x fs-1"></i></button>
           </div>
           <!--end::Toolbar-->
         </div>`,
@@ -310,102 +316,70 @@
 
     dropzone.on('addedfile', file => {
       const dropzoneItem = $(file.previewElement)
-
-      // Hookup the start button.
       dropzoneItem.on('click', '.dropzone-start', () => dropzone.enqueueFile(file));
-
-      // Hide the Upload and Delete buttons for all files.
       ref.convertAll.css('display', 'inline-block');
       ref.removeAll.css('display', 'inline-block');
-
-      // Display tooltips on the buttons of the added items.
       initTooltip(dropzoneItem);
     });
 
-    // Update the progress bar.
-    dropzone.on('uploadprogress', (file, progress) => {
-      const dropzoneItem = $(file.previewElement);
-      dropzoneItem
-        .find('.progress-bar')
-        .css('width', `${progress}%`);
-      
-      // Displays the status during processing.
-      if (progress === 100)
-        dropzoneItem.find('.dropzone-status').html('<span class="badge badge-secondary text-uppercase">processing</span>');
-    });
-    // dropzone.on('totaluploadprogress', progress => {
-    //   ref.dropzone
-    //     .find('.progress-bar')
-    //     .css('width', `${progress}%`);
-    // });
     dropzone.on('sending', (file, xhr, formData) => {
       const dropzoneItem = $(file.previewElement);
-      // Show the total progress bar when upload starts.
       dropzoneItem.find('.progress-bar').css('opacity', 1);
-
-      // And disable the start button
-      dropzoneItem.find('.dropzone-start').prop('disabled', true);
-
-      // Displays the status of the upload in progress.
+      dropzoneItem.find('.dropzone-start').addClass('d-none');
       dropzoneItem.find('.dropzone-status').removeClass('d-none');
-
-      // Add language options to the data to be sent.
       formData.append('language', ref.language.val());
     });
 
-    // Hide the progress bar when nothing's uploading anymore.
-    dropzone.on('complete', file => {
-      const dropzoneItem = ref.dropzone.find('.dz-complete');
-      setTimeout(() => {
+    dropzone.on('uploadprogress', (file, progress) => {
+      const dropzoneItem = $(file.previewElement);
+      dropzoneItem.find('.progress-bar').css('width', `${progress}%`);
+      if (progress === 100) {
         dropzoneItem.find('.progress-bar').css('opacity', 0);
         dropzoneItem.find('.progress').css('opacity', 0);
-        dropzoneItem.find('.dropzone-start').addClass('d-none');
-        if (file.status !== 'error') {
-          dropzoneItem.find('.dropzone-download').removeClass('d-none');
-          dropzoneItem.find('.dropzone-preview').removeClass('d-none');
-          dropzoneItem.find('.dropzone-status').html('<span class="badge badge-success text-uppercase">finished</span>');
-        } else
-          dropzoneItem.find('.dropzone-status')
-            .html('<span class="badge badge-danger text-uppercase">error</span>')
-            .removeClass('d-none');
-      }, 300);
-    });
-
-    // On all files completed upload
-    dropzone.on('queuecomplete', () => {
-      ref.convertAll.css('display', 'none');
-    });
-
-    // On all files removed
-    dropzone.on('removedfile', file => {
-      if (dropzone.files.length < 1) {
-        ref.convertAll.css('display', 'none');
-        ref.removeAll.css('display', 'none');
+        dropzoneItem.find('.dropzone-status').html('<span class="badge badge-secondary">Converting</span>');
+        dropzoneItem.find('.dropzone-spinner').removeClass('d-none');
       }
     });
 
     // Response after upload success.
     dropzone.on('success', (file, res) => {
-      // Create a download link for the converted PDF file.
       const dropzoneItem = $(file.previewElement);
       dropzoneItem.find('.dropzone-download').attr('href', res.filePath);
       dropzoneItem.find('.dropzone-preview').attr('href', res.filePath);
     });
 
-    // Delete the tooltip at the same time the file is deleted.
+    dropzone.on('complete', (file, res) => {
+      const dropzoneItem = $(file.previewElement);
+      dropzoneItem.find('.dropzone-spinner').addClass('d-none');
+      if (file.status === 'success') {
+        dropzoneItem.find('.dropzone-download').removeClass('d-none');
+        dropzoneItem.find('.dropzone-preview').removeClass('d-none');
+        dropzoneItem.find('.dropzone-status').html('<span class="badge badge-success">Finished</span>');
+      } else {
+        dropzoneItem.find('.dropzone-start').addClass('d-none');
+        dropzoneItem.find('.dropzone-status').html('<span class="badge badge-danger">Error</span>').removeClass('d-none');
+      }
+    });
+
+    dropzone.on('queuecomplete', () => {
+      ref.convertAll.css('display', 'none');
+    });
+
     dropzone.on('removedfile', file => {
+      if (dropzone.files.length < 1) {
+        ref.convertAll.css('display', 'none');
+        ref.removeAll.css('display', 'none');
+      }
       for (let tooltipTrigger of file.previewElement.querySelectorAll('.dropzone-start,.dropzone-download,.dropzone-preview,.dropzone-cancel,.dropzone-delete')) {
         const tooltip = bootstrap.Tooltip.getInstance(tooltipTrigger);
         tooltip.dispose();
       }
     });
-
-    // Setup the buttons for all transfers
+    
     ref.convertAll.on('click', () => {
       dropzone.enqueueFiles(dropzone.getFilesWithStatus(Dropzone.ADDED));
     });
 
-    // Setup the button for remove all files
     ref.removeAll.on('click', () => {
       ref.convertAll.css('display', 'none');
       ref.removeAll.css('display', 'none');

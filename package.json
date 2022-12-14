@@ -7,10 +7,11 @@
   "types": "types/index.d.ts",
   "files": [
     "dist/*.js",
-    "docs",
     "types",
+    "web-demo",
     "CHANGELOG.md",
     "hero.svg",
+    "hero2.svg",
     "LANGUAGE-LIST.md",
     "LICENSE",
     "package.json",

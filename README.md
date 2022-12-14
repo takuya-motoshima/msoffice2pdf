@@ -4,11 +4,11 @@ Convert Microsoft Office documents (ppt, pptx, doc, docx, xls, xlsx) to PDF.
 Click [here](CHANGELOG.md) to see the change log.
 
 <p align="center">
-  <img src="docs/img/convert.svg" width="406">
+  <img src="hero2.svg" width="406">
 </p>
 
 ## Web Demo
-Click [here](docs/web-demo/README.md) to learn how to use the web demo.
+Click [here](web-demo/README.md) to learn how to use the web demo.
 
 ## Supported OS
 - Linux
