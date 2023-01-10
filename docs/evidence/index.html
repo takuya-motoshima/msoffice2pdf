@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="dark">
+<!--begin::Head-->
+<head>
+  <title>Evidence of Office Documents to PDF</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!--begin::Fonts-->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+  <!--end::Fonts-->
+  <!--begin::Vendor Stylesheets(used for this page only)-->
+  <link href="theme/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
+  <!--end::Vendor Stylesheets-->
+  <!--begin::Global Stylesheets Bundle(used by all pages)-->
+  <link href="theme/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+  <link href="theme/css/style.bundle.css" rel="stylesheet" type="text/css" />
+  <!--end::Global Stylesheets Bundle-->
+  <!--begin::Custom Stylesheets-->
+  <style>
+    table.dataTable.fixedHeader-floating,
+    table.dataTable.fixedHeader-locked {
+      background-color: var(--kt-card-bg);
+    }
+
+    /* .tooltip {
+      --bs-tooltip-bg: var(--kt-info);
+    } */
+
+    .modal {
+      --bs-modal-zindex: 1081;
+    }
+
+    .btn {
+      --bs-btn-disabled-opacity: .3;
+    }
+  </style>
+  <!--end::Custom Stylesheets-->
+</head>
+<!--end::Head-->
+<!--begin::Body-->
+<body>
+  <!--begin::Content container-->
+  <!-- <div class="container py-15 px-10"> -->
+  <div class="container-fluid py-15 px-10">
+    <!--begin::Card-->
+    <div class="card card-flush h-xl-100">
+      <!--begin::Card header-->
+      <div class="card-header pt-7">
+        <!--begin::Title-->
+        <h3 class="card-title align-items-start flex-column">
+          <span class="card-label fw-bold text-dark">Evidence of Office Documents to PDF</span>
+        </h3>
+        <!--end::Title-->
+      </div>
+      <!--end::Card header-->
+      <!--begin::Card body-->
+      <div class="card-body">
+        <!--begin::Table-->
+        <table data-ref="evidenceTable" class="table align-middle table-row-dashed fs-6 gy-3">
+          <!--begin::Table head-->
+          <thead>
+            <!--begin::Table row-->
+            <tr class="text-start text-gray-400 fw-bold fs-7 gs-0">
+              <th class="text-end">Actions</th>
+              <th>Document Name</th>
+              <th class="text-end">Size(bytes)</th>
+              <th class="text-end">Processing seconds</th>
+              <th class="text-end">Pre CPU utilization</th>
+              <th class="text-end">Post CPU utilization</th>
+              <th class="text-end">Pre Memory utilization</th>
+              <th class="text-end">Post Memory utilization</th>
+              <th class="text-end">Pre Memory usage</th>
+              <th class="text-end">Post Memory usage</th>
+              <th class="text-end">Pre Load average</th>
+              <th class="text-end">Post Load average</th>
+            </tr>
+            <!--end::Table row-->
+          </thead>
+          <!--end::Table head-->
+          <!--begin::Table body-->
+          <tbody class="fw-bold text-gray-600"></tbody>
+          <!--end::Table body-->
+        </table>
+        <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start"></div><div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end"></div></div></div>
+        <!--end::Table-->
+      </div>
+      <!--end::Card body-->
+    </div>
+    <!--end::Card-->
+  </div>
+  <!--end::Content container-->
+  <!--begin::Scrolltop-->
+  <div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
+    <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
+    <span class="svg-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1" transform="rotate(90 13 6)" fill="currentColor" />
+        <path d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z" fill="currentColor" />
+      </svg>
+    </span>
+    <!--end::Svg Icon-->
+  </div>
+  <!--end::Scrolltop-->
+  <!--begin::Javascript-->
+  <!--begin::Global Javascript Bundle(used by all pages)-->
+  <script src="theme/plugins/global/plugins.bundle.js"></script>
+  <script src="theme/js/scripts.bundle.js"></script>
+  <!--end::Global Javascript Bundle-->
+  <!--begin::Vendors Javascript(used for this page only)-->
+  <script src="theme/plugins/custom/datatables/datatables.bundle.js"></script>
+  <!--end::Vendors Javascript-->
+	<!--begin::Custom Javascript(used for this page only)-->
+  <script type="module">
+    import hbs from './libs/handlebars-extd/dist/build.esm.js';
+    import {Datatable, selectRef, Modal} from './libs/metronic-extension/dist/build.esm.js';
+    import ConversionResultModal from './ConversionResultModal.js';
+
+    async function loadTableDataJson() {
+      return (await fetch('results.json')).json();
+    }
+
+    async function initDatatable() {
+      let targets = 0;
+      let firstRowTooltip;
+      const evidenceTable = new Datatable(ref.evidenceTable, {
+        data: await loadTableDataJson(), 
+        dom: `<'row'<'col-12 dataTables_pager'p>><'row'<'col-12'tr>><'row'<'col-12 dataTables_pager'p>>`,
+        columnDefs: [
+          {targets: targets++, data: 'actions', orderable: false, render: (data, type, row) => 
+            `<button data-on-show-details type="button" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-25px h-25px"
+              data-bs-toggle="tooltip" data-bs-dismiss="click" title="Click to show details.">
+              <!--begin::Svg Icon | path: /var/www/preview.keenthemes.com/kt-products/docs/metronic/html/releases/2022-12-26-231111/core/html/src/media/icons/duotune/general/gen021.svg-->
+              <span class="svg-icon svg-icon-5 svg-icon-gray-700">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor"/>
+                  <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor"/>
+                </svg>
+              </span>
+              <!--end::Svg Icon-->
+            </button>`
+          },
+          {targets: targets++, data: 'fileName', render: (data, type, row) =>
+            hbs.compile(
+              `<div class="d-flex align-items-center">
+                <img src="{{row.sourceThumb}}" class="w-175px rounded-3 me-3" alt="{{row.sourceThumb}}">
+                <span class="fs-6 me-1">{{row.fileName}}</span>
+              </div>`)({row})
+          },
+          {targets: targets++, className: 'text-end', data: 'fileByteSize', render: data => data.toLocaleString()},
+          {targets: targets++, className: 'text-end', data: 'processingSeconds'},
+          {targets: targets++, className: 'text-end', data: 'preCpuUtilization', render: data => `${data}%`},
+          {targets: targets++, className: 'text-end', data: 'postCpuUtilization', render: data => `${data}%`},
+          {targets: targets++, className: 'text-end', data: 'preMemoryUtilization', render: data => `${data}%`},
+          {targets: targets++, className: 'text-end', data: 'postMemoryUtilization', render: data => `${data}%`},
+          {targets: targets++, className: 'text-end', data: 'preMemoryUsage', render: data => `${data}MB`},
+          {targets: targets++, className: 'text-end', data: 'postMemoryUsage', render: data => `${data}MB`},
+          {targets: targets++, className: 'text-end', data: 'preLoadAverage', render: data => data.split(',')[0]},
+          {targets: targets++, className: 'text-end', data: 'postLoadAverage', render: data => data.split(',')[0]},
+        ],
+        order: [[1, 'asc']],
+        paging: false,
+        fixedHeader: true,
+        preDrawCallback: settings => {
+          if (firstRowTooltip) {
+            firstRowTooltip.hide();
+            firstRowTooltip = null;
+          }
+        },
+        drawCallback: settings => {
+        // initComplete: settings => {
+          // Show the tooltip for the first row.
+          setTimeout(() => {
+            const api = new $.fn.dataTable.Api(settings);
+            const firstRow = api.table().body().querySelector('tr:first-child');
+            // const firstRow = api.rows(0).nodes()[0];
+            const tooltipTrigger = firstRow.querySelector('[data-on-show-details]')
+            firstRowTooltip = bootstrap.Tooltip.getInstance(tooltipTrigger);
+            firstRowTooltip.show();
+          });
+        },
+      });
+      return evidenceTable;
+    }
+
+    function initForm() {
+      ref.evidenceTable.on('click', '[data-on-show-details]', evnt => {
+        const rows = evidenceTable.getRowNodes();
+        const row = evnt.currentTarget.closest('tr');
+        const currentRowIndex = rows.indexOf(row);
+        conversionResultModal.show(currentRowIndex, evidenceTable);
+      });
+    }
+
+    const ref = selectRef();
+    const evidenceTable = await initDatatable();
+    const conversionResultModal = new ConversionResultModal();
+    window.evidenceTable = evidenceTable;
+    window.ref = ref;
+    initForm();
+  </script>
+  <!--end::Custom Javascript-->
+  <!--end::Javascript-->
+</body>
+<!--end::Body-->
+</html>
