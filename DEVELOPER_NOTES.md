@@ -1,6 +1,17 @@
 # Developer's Notes
 
-## Check the fonts embedded in the PDF
+<!-- ## LibreOffice configuration changes.
+https://unix.stackexchange.com/questions/608198/changing-the-ui-font-for-libreoffice-in-linux
+
+1. Go to the location where the configuration file is located.
+    ```sh
+    cd /opt/libreoffice7.4/share/registry
+    ```
+1. Back up the original configuration.
+    ```sh
+    sudo cp -a main.xcd main.xcd.bak
+    ``` -->
+## Check the fonts embedded in the PDF.
 1. Install Poppler.  
     Poppler is a very powerful tool in PDF processing; the package name to install on Linux is poppler-utils.
     ```sh

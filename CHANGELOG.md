@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.0.13] - 2023/1/15
+### Added
+- Added evidence ([https://takuya-motoshima.github.io/msoffice2pdf/evidence/](https://takuya-motoshima.github.io/msoffice2pdf/evidence/)).
+
 ## [1.0.12] - 2023/1/10
 ### Added
 - Added conversion result evidence from office documents to PDF.
@@ -17,7 +21,7 @@ All notable changes to this project will be documented in this file.
 
 ## [1.0.9] - 2022/12/13
 ### Changed
-- Added developer memo (DEVELOPERS_NOTES.md).
+- Added developer memo (DEVELOPER_NOTES.md).
 - Added display of PDF conversion status to web demo.
 
 ## [1.0.8] - 2022/12/13
@@ -76,3 +80,4 @@ All notable changes to this project will be documented in this file.
 [1.0.10]: https://github.com/takuya-motoshima/msoffice2pdf/compare/v1.0.9...v1.0.10
 [1.0.11]: https://github.com/takuya-motoshima/msoffice2pdf/compare/v1.0.10...v1.0.11
 [1.0.12]: https://github.com/takuya-motoshima/msoffice2pdf/compare/v1.0.11...v1.0.12
+[1.0.13]: https://github.com/takuya-motoshima/msoffice2pdf/compare/v1.0.12...v1.0.13
